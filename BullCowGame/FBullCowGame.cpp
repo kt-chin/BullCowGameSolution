@@ -1,10 +1,16 @@
+#pragma once
 #include "FBullCowGame.h"
 #include <cctype>
 #include <algorithm>
+#include <vector>
+#include <time.h>
 
+#include <map>
+//to make syntax unreal friendly
+#define TMap std::map 
 using int32 = int;
 
-int32 FBullCowGame::GetMaxTries() const {return MyMaxTries; }
+
 int32 FBullCowGame::GetCurrentTry() const {return MyCurrentTry; }
 int32 FBullCowGame::GetHiddenWordLength() const {return MyHiddenWord.length(); }
 bool FBullCowGame::WinGame() const {return bGameIsWon; }
@@ -14,15 +20,22 @@ FBullCowGame::FBullCowGame()
 	Reset();
 }
 
+int32 FBullCowGame::GetMaxTries() const 
+{ 
+	TMap<int32, int32> WordLengthToMaxTries{ {3,4},{4,7},{5,10},{6,16},{7,20},{8,22},{9,25},{10,25} };
+	return WordLengthToMaxTries[MyHiddenWord.length()];
+}
+
 void FBullCowGame::Reset()
 {
 	constexpr int32 MAX_TRIES = 10;
 	MyMaxTries = MAX_TRIES;
-
-	const FString HIDDEN_WORD[6] = { "plunder", "crusade", "ace", "nags", "overhauling", "playdough"};
-	for (int i = 0; i < 6; i++)
+	srand(time(NULL)); //To randomize every time a different sequence, we need to SEED the rand function.
+	int32 Randomizer = rand() % 8;
+	std::vector<FString> HIDDEN_WORD = { "plunder", "crusade", "ace", "nags", "overhauling", "playdough", "forecast", "machine"}; //Word MUST be isogram
+	for (int i = 0; i < 8; i++)
 	{
-		MyHiddenWord = HIDDEN_WORD[rand() % 6];
+		MyHiddenWord = HIDDEN_WORD[Randomizer];
 	}
 	bGameIsWon = false;
 	MyCurrentTry = 1;
@@ -32,7 +45,7 @@ void FBullCowGame::Reset()
 
 EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess) const
 {
-	if (false)
+	if (!IsIsogram(Guess))
 	{
 		return EGuessStatus::Not_Isogram;
 	}
@@ -44,18 +57,15 @@ EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess) const
 	{
 		return EGuessStatus::Wrong_Length;
 	}
+	else if (!IsAlphabet(Guess))
+	{
+		return EGuessStatus::Not_Letters;
+	}
 	else
 	{
 		return EGuessStatus::OK;
 	}
-	//If Guess is not isogram
-		//return error
-	//If Guess is not all lowercase
-		//return error
-	//If Guess length is wrong
-		//return error
-	// otherwise
-		//return ok
+
 }
 
 //Recieves a valid guess, increments turn and returns count.
@@ -102,4 +112,40 @@ FBullCowCount FBullCowGame::SubmitValidGuess(FString Guess)
 		bGameIsWon = false;
 	}
 	return BullCowCount;
+}
+
+bool FBullCowGame::IsIsogram(FString Word) const
+{
+	// treat 0 + 1 letter words as isograms
+	if (Word.length() <= 1) { return true; }
+
+	TMap<char, bool> LetterSeen;
+	for (auto Letter : Word) // Loop For all LETTERS of the WORD (Range Loop)
+	{
+		Letter = tolower(Letter);//handle mixed case
+		if (LetterSeen[Letter])
+		{
+			return false; // We do NOT have an isogram at this stage
+		}
+		else
+		{
+			LetterSeen[Letter] = true;
+		}
+	}
+	return true;
+}
+
+bool FBullCowGame::IsAlphabet(FString Word) const
+{
+	for (int32 i = 0; i < Word.length(); i++)
+	{
+		if (isalpha(Word[i])) //checks to see if the iterated string has only alphabet
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }

@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+/*The game logic (no view/direct user interaction)
+Game is a simple word game based on mastermind*/
 
 using FString = std::string;
 using int32 = int;
@@ -7,6 +9,7 @@ using int32 = int;
 //all values initialized to 0
 struct FBullCowCount 
 {
+	//Makes syntax unreal friendly
 	int32 Bulls = 0;
 	int32 Cows = 0;
 };
@@ -17,7 +20,8 @@ enum class EGuessStatus
 	OK,
 	Not_Isogram,
 	Wrong_Length,
-	Not_Lowercase
+	Not_Lowercase,
+	Not_Letters
 };
 
 class FBullCowGame {
@@ -31,7 +35,7 @@ public:
 
 	FBullCowGame(); //Constructor
 
-	void Reset(); //TODO Make a more rich return value.
+	void Reset();
 	
 
 	// Counts bulls and cows and increases try number assuming valid guess
@@ -43,4 +47,6 @@ private:
 	int32 MyCurrentTry;
 	FString MyHiddenWord;
 	bool bGameIsWon;
+	bool IsIsogram(FString) const;
+	bool IsAlphabet(FString) const;
 };

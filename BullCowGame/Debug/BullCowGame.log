@@ -1,2 +1,5 @@
-﻿  Main.cpp
+﻿  FBullCowGame.cpp
+d:\githubrepositories\c++\bull vs cow\bullcowgamesolution\bullcowgame\fbullcowgame.cpp(32): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+d:\githubrepositories\c++\bull vs cow\bullcowgamesolution\bullcowgame\fbullcowgame.cpp(141): warning C4018: '<': signed/unsigned mismatch
+d:\githubrepositories\c++\bull vs cow\bullcowgamesolution\bullcowgame\fbullcowgame.cpp(152): warning C4715: 'FBullCowGame::IsAlphabet': not all control paths return a value
   BullCowGame.vcxproj -> D:\GithubRepositories\C++\Bull Vs Cow\BullCowGameSolution\Debug\BullCowGame.exe
