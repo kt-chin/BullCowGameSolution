@@ -62,7 +62,7 @@ void PrintGameSummary()
 	}
 	else
 	{
-		std::cout << "Bad Luck Nerd!\n\n";
+		std::cout << "Too Bad, Try Again!\n\n";
 	}
 }
 
